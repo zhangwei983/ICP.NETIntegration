@@ -3,7 +3,7 @@
 The Internet Computer(IC) Agent is an open-source toolkit for Unity game developers who want to develop games on the Internet Computer, it's based on [ICP.NET](https://github.com/edjCase/ICP.NET) which provides the Internet Computer Protocol(ICP) libraries for .NET.
 
 ## ICP.NET Integration
-Here describes how the [ICP.NET](https://github.com/edjCase/ICP.NET) is integrated, basically explains how the managed dlls under `com.ic.agent\ICP.NET` are generated.
+Here describes how the [ICP.NET](https://github.com/edjCase/ICP.NET) is integrated, basically explains how the managed dlls under `ICP.NET` folder are generated.
 
 - `EdjCase.ICP.Agent.dll` & `EdjCase.ICP.Candid.dll` are compiled from [ICP.NET](https://github.com/edjCase/ICP.NET) directly, they're targeted to .NET standard 2.0, so it’s okay to use them directly.
 - For all the other dependencies, including  
