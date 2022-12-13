@@ -7,10 +7,8 @@ An example about how to integrate [ICP.NET](https://github.com/edjCase/ICP.NET) 
 3. Open the `Assets\Scenes\SampleScene.unity`;
 4. Play in the Unity Editor.
 
-**Haven't tested building to player for multiple platforms.**
-
 ## ICP.NET Integration
-Here describes how the managed dlls under `Assets\ICP.NET` are generated.
+Here describes how the managed dlls under `com.ic.agent\ICP.NET` are generated.
 
 - `EdjCase.ICP.Agent.dll` & `EdjCase.ICP.Candid.dll` are compiled from [ICP.NET](https://github.com/edjCase/ICP.NET) directly, they're targeted to .NET standard 2.0, so it’s okay to use them directly.
 - For all the other dependencies, including  
@@ -21,4 +19,4 @@ Here describes how the managed dlls under `Assets\ICP.NET` are generated.
     - System.IO.Pipelines (6.0.1)  
     - Microsoft.Bcl.HashCode.dll (1.1.1)  
 
-  Download the packages with the right version from https://www.nuget.org/packages and choose the dll with netstandard2.0 version.
+  Download the packages with the correct version from https://www.nuget.org/packages and choose the dll with netstandard2.0 version.
