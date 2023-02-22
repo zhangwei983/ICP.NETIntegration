@@ -28,8 +28,9 @@ public class TestCSharpAgent : MonoBehaviour
 
         if (reply != null)
         {
-            Debug.Log(reply.Arg.Values[0].Value);
-            Debug.Log(reply.Arg.Values[0].Type);
+            Debug.Log(reply.Arg.Values[0].Value.ToString());
+            System.Console.WriteLine(reply.Arg.Values[0].Type.ToString());
+            //Debug.Log(reply.Arg.Values[0].Type);
         }
     }
 
