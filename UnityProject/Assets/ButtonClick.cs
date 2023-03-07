@@ -5,8 +5,20 @@ using Microsoft.Win32;
 
 public class ButtonClick : MonoBehaviour
 {
-    public string testTarget = @"C:\test.html";
-    public string myRootKey = "vincenttest";
+    public void Start()
+    {
+#if PLATFORM_STANDALONE_OSX || UNITY_EDITOR_OSX
+        var button_register = GameObject.Find("Button_Register");
+        if (button_register != null)
+        {
+            button_register.SetActive(false);
+        }
+#endif
+    }
+
+    //public string testTarget = @"C:\test.html";
+    private string testTarget = @"/Users/vincentzhang/Documents/test.html";
+    private string myRootKey = "vincenttest";
     public string applicationPath; // = @"C:\Projects\vs\TestBrowser\TestBrowser\bin\Debug\net6.0-windows\TestBrowser.exe";
 
     public void BrowserButtonClick()
@@ -16,11 +28,10 @@ public class ButtonClick : MonoBehaviour
 
     public void RegisterButtonClick()
     {
-        Debug.Log(Application.dataPath);
-
 #if PLATFORM_STANDALONE_WIN
         // This is just used to demo how we register a protocol handler.
-        // You should rely on the installer to register in real case.
+        // You should rely on the installer to register in the registry in real case.
+
         var regCurrentUser = Registry.CurrentUser;
         var regClassesRoot = regCurrentUser.OpenSubKey("SOFTWARE", true)?.OpenSubKey("Classes", true);
         if (regClassesRoot == null)
