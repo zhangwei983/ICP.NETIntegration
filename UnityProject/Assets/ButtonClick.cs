@@ -17,7 +17,7 @@ public class ButtonClick : MonoBehaviour
     }
 
     //public string testTarget = @"C:\test.html";
-    private string testTarget = @"/Users/vincentzhang/Documents/test.html";
+    private string testTarget = @"https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
     private string myRootKey = "vincenttest";
     public string applicationPath; // = @"C:\Projects\vs\TestBrowser\TestBrowser\bin\Debug\net6.0-windows\TestBrowser.exe";
 
