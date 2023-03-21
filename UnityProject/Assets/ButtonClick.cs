@@ -5,6 +5,10 @@ using Microsoft.Win32;
 
 public class ButtonClick : MonoBehaviour
 {
+#if UNITY_ANDROID
+    private AndroidJavaObject mPlugin = null;
+#endif
+
     public void Start()
     {
 #if PLATFORM_STANDALONE_OSX || UNITY_EDITOR_OSX
@@ -13,6 +17,13 @@ public class ButtonClick : MonoBehaviour
         {
             button_register.SetActive(false);
         }
+#endif
+
+#if UNITY_ANDROID
+        var pluginClass = new AndroidJavaClass("com.mycompany.testurl.MyPlugin");
+        mPlugin = pluginClass.CallStatic<AndroidJavaObject>("initImpl", new MyPluginCallback());
+
+        //mPlugin = new AndroidJavaObject("com.mycompany.testurl.MyPlugin", new MyPluginCallback());
 #endif
     }
 
@@ -23,7 +34,11 @@ public class ButtonClick : MonoBehaviour
 
     public void BrowserButtonClick()
     {
+#if UNITY_ANDROID
+        mPlugin.Call("sendMessage", 123456);
+#else
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(testTarget) { UseShellExecute = true });
+#endif
     }
 
     public void RegisterButtonClick()
