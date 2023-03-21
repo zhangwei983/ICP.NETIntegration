@@ -36,3 +36,7 @@ public class MyPlugin {
         }
     }
 }
+
+interface MyPluginCallback {
+    void onSendMessage(int number);
+}
