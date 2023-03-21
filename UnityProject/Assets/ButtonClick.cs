@@ -30,7 +30,6 @@ public class ButtonClick : MonoBehaviour
     public void BrowserButtonClick()
     {
 #if UNITY_ANDROID
-        mPlugin.Call("sendMessage", 123456);
         mPlugin.Call("openBrowser", sTestTarget);
 #else
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(testTarget) { UseShellExecute = true });

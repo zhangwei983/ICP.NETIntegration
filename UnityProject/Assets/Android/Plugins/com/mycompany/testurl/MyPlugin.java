@@ -7,6 +7,11 @@ import android.util.Log;
 
 import com.unity3d.player.UnityPlayer;
 
+// Implement in C# to call from java.
+interface MyPluginCallback {
+    void onSendMessage(String url);
+}
+
 public class MyPlugin {
     static final String TAG_PLUGIN = "MyPlugin";
 
@@ -14,8 +19,7 @@ public class MyPlugin {
 
     private MyPluginCallback mMyPluginCallback;
 
-    public static MyPlugin initImpl(MyPluginCallback pluginCallback)
-    {
+    public static MyPlugin initImpl(MyPluginCallback pluginCallback) {
         if (currentPlugin != null)
             return currentPlugin;
 
@@ -29,28 +33,16 @@ public class MyPlugin {
         mMyPluginCallback = pluginCallback;
     }
 
-    public void openBrowser(String url){
+    public void openBrowser(String url) {
         Log.i(TAG_PLUGIN, url);
         
         //String url = "https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         UnityPlayer.currentActivity.startActivity(intent);
-
-        Log.i(TAG_PLUGIN, "Browser opened.");
     }
 
-    public void sendMessage(int number){
-        Log.i(TAG_PLUGIN, "SendMessage is called.");
-
-//        if (mMyPluginCallback != null)
-//        {
-//            mMyPluginCallback.onSendMessage(number);
-//        }
-    }
-
-    public void sendMessage()
-    {
+    public void sendMessage() {
         Uri uri = UnityPlayer.currentActivity.getIntent().getData();
         if (uri != null && mMyPluginCallback != null)
         {
@@ -59,8 +51,4 @@ public class MyPlugin {
             mMyPluginCallback.onSendMessage(url);
         }
     }
-}
-
-interface MyPluginCallback {
-    void onSendMessage(String url);
 }
