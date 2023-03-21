@@ -1,6 +1,8 @@
 package com.mycompany.testurl;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import com.unity3d.player.UnityPlayer;
@@ -34,6 +36,15 @@ public class MyPlugin {
         {
             mMyPluginCallback.onSendMessage(number);
         }
+    }
+
+    public void openBrowser(){
+        String url = "https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        UnityPlayer.currentActivity.startActivity(intent);
+
+        Log.i(TAG_PLUGIN, "Browser opened.");
     }
 }
 
