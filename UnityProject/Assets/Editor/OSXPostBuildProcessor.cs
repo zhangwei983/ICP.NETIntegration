@@ -1,3 +1,4 @@
+#if UNITY_EDITOR_OSX
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,3 +43,4 @@ public class OSXPostBuildProcessor : IPostprocessBuildWithReport
         File.WriteAllText(plistPath, plist.WriteToString());
     }
 }
+#endif
