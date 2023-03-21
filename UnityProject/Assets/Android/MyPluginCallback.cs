@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MyPluginCallback : AndroidJavaProxy
@@ -6,8 +7,8 @@ public class MyPluginCallback : AndroidJavaProxy
     {
     }
 
-    public void onSendMessage(int number)
+    public void onSendMessage(String url)
     {
-        Debug.Log("Value from callback is: " + number);
+        Debug.Log(url);
     }
 }

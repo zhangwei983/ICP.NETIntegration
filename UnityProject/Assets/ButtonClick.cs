@@ -5,6 +5,8 @@ using Microsoft.Win32;
 
 public class ButtonClick : MonoBehaviour
 {
+    private static string sTestTarget = @"https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
+
 #if UNITY_ANDROID
     private AndroidJavaObject mPlugin = null;
 #endif
@@ -22,21 +24,14 @@ public class ButtonClick : MonoBehaviour
 #if UNITY_ANDROID
         var pluginClass = new AndroidJavaClass("com.mycompany.testurl.MyPlugin");
         mPlugin = pluginClass.CallStatic<AndroidJavaObject>("initImpl", new MyPluginCallback());
-
-        //mPlugin = new AndroidJavaObject("com.mycompany.testurl.MyPlugin", new MyPluginCallback());
 #endif
     }
-
-    //public string testTarget = @"C:\test.html";
-    private string testTarget = @"https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
-    private string myRootKey = "vincenttest";
-    public string applicationPath; // = @"C:\Projects\vs\TestBrowser\TestBrowser\bin\Debug\net6.0-windows\TestBrowser.exe";
 
     public void BrowserButtonClick()
     {
 #if UNITY_ANDROID
         mPlugin.Call("sendMessage", 123456);
-        mPlugin.Call("openBrowser");
+        mPlugin.Call("openBrowser", sTestTarget);
 #else
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(testTarget) { UseShellExecute = true });
 #endif

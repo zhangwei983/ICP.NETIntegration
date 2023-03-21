@@ -10,44 +10,57 @@ import com.unity3d.player.UnityPlayer;
 public class MyPlugin {
     static final String TAG_PLUGIN = "MyPlugin";
 
-    static MyPlugin mMyPlugin;
+    public static MyPlugin currentPlugin;
 
     private MyPluginCallback mMyPluginCallback;
 
     public static MyPlugin initImpl(MyPluginCallback pluginCallback)
     {
-        if (mMyPlugin != null)
-            return mMyPlugin;
+        if (currentPlugin != null)
+            return currentPlugin;
 
-        mMyPlugin = new MyPlugin();
-        mMyPlugin.init(pluginCallback);
+        currentPlugin = new MyPlugin();
+        currentPlugin.init(pluginCallback);
 
-        return mMyPlugin;
+        return currentPlugin;
     }
 
     public void init(MyPluginCallback pluginCallback) {
         mMyPluginCallback = pluginCallback;
     }
 
-    public void sendMessage(int number){
-        Log.i(TAG_PLUGIN, "SendMessage is called.");
-
-        if (mMyPluginCallback != null)
-        {
-            mMyPluginCallback.onSendMessage(number);
-        }
-    }
-
-    public void openBrowser(){
-        String url = "https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
+    public void openBrowser(String url){
+        Log.i(TAG_PLUGIN, url);
+        
+        //String url = "https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         UnityPlayer.currentActivity.startActivity(intent);
 
         Log.i(TAG_PLUGIN, "Browser opened.");
     }
+
+    public void sendMessage(int number){
+        Log.i(TAG_PLUGIN, "SendMessage is called.");
+
+//        if (mMyPluginCallback != null)
+//        {
+//            mMyPluginCallback.onSendMessage(number);
+//        }
+    }
+
+    public void sendMessage()
+    {
+        Uri uri = UnityPlayer.currentActivity.getIntent().getData();
+        if (uri != null && mMyPluginCallback != null)
+        {
+            String url = uri.toString();
+            Log.i("MyPlugin", url);
+            mMyPluginCallback.onSendMessage(url);
+        }
+    }
 }
 
 interface MyPluginCallback {
-    void onSendMessage(int number);
+    void onSendMessage(String url);
 }
