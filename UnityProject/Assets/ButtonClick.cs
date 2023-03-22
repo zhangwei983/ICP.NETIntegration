@@ -13,7 +13,7 @@ public class ButtonClick : MonoBehaviour
 
     public void Start()
     {
-#if PLATFORM_STANDALONE_OSX || UNITY_EDITOR_OSX
+#if PLATFORM_STANDALONE_OSX || UNITY_EDITOR_OSX || UNITY_ANDROID
         var button_register = GameObject.Find("Button_Register");
         if (button_register != null)
         {

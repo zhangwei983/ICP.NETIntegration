@@ -10,5 +10,7 @@ public class MyPluginCallback : AndroidJavaProxy
     public void onSendMessage(String url)
     {
         Debug.Log(url);
+
+        MyPluginCallbackMainThreadDispatcher.GetInstance().EnqueueReceivedCallback(url);
     }
 }
