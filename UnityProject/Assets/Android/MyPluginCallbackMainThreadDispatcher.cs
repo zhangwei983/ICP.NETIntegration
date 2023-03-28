@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,13 +42,9 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
             m_ReceivedCallbacksList = temp;
         }
 
-        var go = GameObject.Find("Callback URL");
-        var text = go?.GetComponent<Text>();
-
-        foreach (var url in m_ReceivedCallbacksList)
+        foreach (var identityPath in m_ReceivedCallbacksList)
         {
-            if (text != null)
-                text.text = url;
+            OnCallbackReceived(identityPath);
         }
 
         m_ReceivedCallbacksList.Clear();
@@ -65,5 +62,21 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
     void OnDestroy()
     {
         instance = null;
+    }
+
+    void OnCallbackReceived(string identityPath)
+    {
+        if (string.IsNullOrEmpty(identityPath) || !File.Exists(identityPath))
+            return;
+
+        Debug.Log("Identity path '" + identityPath + "' exists: " + File.Exists(identityPath));
+
+        var go = GameObject.Find("Callback URL");
+        var text = go?.GetComponent<Text>();
+        if (text != null)
+            text.text = identityPath;
+
+        var identityJson = File.ReadAllText(identityPath);
+        Debug.Log("VincentIdentity is: " + identityJson.Length);
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MyPluginCallback : AndroidJavaProxy
@@ -7,10 +6,8 @@ public class MyPluginCallback : AndroidJavaProxy
     {
     }
 
-    public void onSendMessage(String url)
+    public void onSendMessage(string identityPath)
     {
-        Debug.Log(url);
-
-        MyPluginCallbackMainThreadDispatcher.GetInstance().EnqueueReceivedCallback(url);
+        MyPluginCallbackMainThreadDispatcher.GetInstance().EnqueueReceivedCallback(identityPath);
     }
 }
