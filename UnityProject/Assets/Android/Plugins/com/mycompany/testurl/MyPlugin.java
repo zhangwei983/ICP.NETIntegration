@@ -16,7 +16,6 @@ interface MyPluginCallback {
 
 public class MyPlugin {
     static final String TAG_PLUGIN = "MyPlugin";
-    static final String sParamName = "identity=";
 
     public static MyPlugin sCurrentPlugin;
 
@@ -53,26 +52,24 @@ public class MyPlugin {
         if (uri == null)
             return;
 
-        String url = Uri.decode(uri.toString());
-        Log.i(TAG_PLUGIN, url);
-
-        int index = url.indexOf(sParamName);
+        String url = uri.toString();
+        int index = url.indexOf("identity=");
         if (index == -1)
             return;
 
-        String identity = url.substring(index + sParamName.length());
-        Log.i(TAG_PLUGIN, identity);
+        String params = url.substring(index);
+        Log.i(TAG_PLUGIN, params);
 
         // Write to a temporary file to internal storage and read it back from C# side.
-        // The reason is we can only pass 1024 bytes as string back to the C# side, but the identity string is more than 3k bytes.
-        String identityPath = UnityPlayer.currentActivity.getFilesDir().getPath() + "/identity.json";
-        File identityFile = new File(identityPath);
+        // The reason is we can only pass 1024 bytes as string back to the C# side, but the params string with identity&delegation is more than 3k bytes.
+        String paramsPath = UnityPlayer.currentActivity.getFilesDir().getPath() + "/params.file";
+        File paramsFile = new File(paramsPath);
         try {
-            if (identityFile.exists())
-                identityFile.delete();
+            if (paramsFile.exists())
+                paramsFile.delete();
 
-            FileOutputStream fileOutputStream = new FileOutputStream(identityFile);
-            fileOutputStream.write(identity.getBytes());
+            FileOutputStream fileOutputStream = new FileOutputStream(paramsFile);
+            fileOutputStream.write(params.getBytes());
             fileOutputStream.flush();
             fileOutputStream.close();
         } catch (Exception e)
@@ -80,7 +77,7 @@ public class MyPlugin {
             e.printStackTrace();
         }
 
-        // Pass the identity path back to C#.
-        mMyPluginCallback.onSendMessage(identityPath);
+        // Pass the params path back to C#.
+        mMyPluginCallback.onSendMessage(paramsPath);
     }
 }

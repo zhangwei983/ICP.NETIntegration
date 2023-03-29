@@ -6,8 +6,8 @@ public class MyPluginCallback : AndroidJavaProxy
     {
     }
 
-    public void onSendMessage(string identityPath)
+    public void onSendMessage(string paramsPath)
     {
-        MyPluginCallbackMainThreadDispatcher.GetInstance().EnqueueReceivedCallback(identityPath);
+        MyPluginCallbackMainThreadDispatcher.GetInstance().EnqueueReceivedCallback(paramsPath);
     }
 }

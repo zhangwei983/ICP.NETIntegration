@@ -42,9 +42,9 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
             m_ReceivedCallbacksList = temp;
         }
 
-        foreach (var identityPath in m_ReceivedCallbacksList)
+        foreach (var paramsPath in m_ReceivedCallbacksList)
         {
-            OnCallbackReceived(identityPath);
+            OnCallbackReceived(paramsPath);
         }
 
         m_ReceivedCallbacksList.Clear();
@@ -64,19 +64,31 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
         instance = null;
     }
 
-    void OnCallbackReceived(string identityPath)
+    void OnCallbackReceived(string paramsPath)
     {
-        if (string.IsNullOrEmpty(identityPath) || !File.Exists(identityPath))
+        if (string.IsNullOrEmpty(paramsPath) || !File.Exists(paramsPath))
             return;
 
-        Debug.Log("Identity path '" + identityPath + "' exists: " + File.Exists(identityPath));
+        Debug.Log("Params path '" + paramsPath + "' exists: " + File.Exists(paramsPath));
 
         var go = GameObject.Find("Callback URL");
         var text = go?.GetComponent<Text>();
         if (text != null)
-            text.text = identityPath;
+            text.text = paramsPath;
 
-        var identityJson = File.ReadAllText(identityPath);
-        Debug.Log("VincentIdentity is: " + identityJson.Length);
+        var parameters = File.ReadAllText(paramsPath);
+        Debug.Log("Params length is: " + parameters.Length);
+
+        const string kIdentityParam = "Identity=";
+        const string kDelegationParam = "&delegation=";
+        var indexOfIdentity = parameters.IndexOf(kIdentityParam);
+        var indexOfDelegation = parameters.IndexOf(kDelegationParam);
+        var identity = parameters.Substring(indexOfIdentity + kIdentityParam.Length, indexOfDelegation);
+        var delegation = parameters.Substring(indexOfDelegation + kDelegationParam.Length);
+
+        Debug.Log("Identity length is: " + identity.Length);
+        Debug.Log(identity);
+        Debug.Log("Delegation length is: " + delegation.Length);
+        Debug.Log(delegation);
     }
 }
