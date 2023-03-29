@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Web;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,12 +80,24 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
         var parameters = File.ReadAllText(paramsPath);
         Debug.Log("Params length is: " + parameters.Length);
 
-        const string kIdentityParam = "Identity=";
+        const string kIdentityParam = "identity=";
         const string kDelegationParam = "&delegation=";
         var indexOfIdentity = parameters.IndexOf(kIdentityParam);
+        if (indexOfIdentity == -1)
+        {
+            Debug.LogError("Cannot find identity");
+            return;
+        }
         var indexOfDelegation = parameters.IndexOf(kDelegationParam);
-        var identity = parameters.Substring(indexOfIdentity + kIdentityParam.Length, indexOfDelegation);
-        var delegation = parameters.Substring(indexOfDelegation + kDelegationParam.Length);
+        if(indexOfDelegation == -1)
+        {
+            Debug.LogError("Cannot find delegation");
+            return;
+        }
+
+        var identityLength = indexOfDelegation - indexOfIdentity - kIdentityParam.Length;
+        var identity = HttpUtility.UrlDecode(parameters.Substring(indexOfIdentity + kIdentityParam.Length, identityLength));
+        var delegation = HttpUtility.UrlDecode(parameters.Substring(indexOfDelegation + kDelegationParam.Length));
 
         Debug.Log("Identity length is: " + identity.Length);
         Debug.Log(identity);
