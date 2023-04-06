@@ -1,17 +1,17 @@
-public class Delegation
+public class DelegationModel
 {
     public string expiration;
     public string pubkey;
 }
 
-public class SignedDelegation
+public class SignedDelegationModel
 {
-    public Delegation delegation;
+    public DelegationModel delegation;
     public string signature;
 }
 
-public class DelegationChain
+public class DelegationChainModel
 {
-    public SignedDelegation[] delegations;
+    public SignedDelegationModel[] delegations;
     public string publicKey;
 }

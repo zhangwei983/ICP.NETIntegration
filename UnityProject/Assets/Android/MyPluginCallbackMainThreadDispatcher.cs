@@ -106,7 +106,7 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
         Debug.Log(delegationString);
 
         var identity = JsonConvert.DeserializeObject<string[]>(identityString);
-        var delegation = JsonConvert.DeserializeObject<DelegationChain>(delegationString);
+        var delegation = JsonConvert.DeserializeObject<DelegationChainModel>(delegationString);
         TestCSharpAgent.SendMessage(identity, delegation);
     }
 }
