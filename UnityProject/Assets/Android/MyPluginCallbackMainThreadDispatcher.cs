@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Web;
@@ -96,12 +97,16 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
         }
 
         var identityLength = indexOfDelegation - indexOfIdentity - kIdentityParam.Length;
-        var identity = HttpUtility.UrlDecode(parameters.Substring(indexOfIdentity + kIdentityParam.Length, identityLength));
-        var delegation = HttpUtility.UrlDecode(parameters.Substring(indexOfDelegation + kDelegationParam.Length));
+        var identityString = HttpUtility.UrlDecode(parameters.Substring(indexOfIdentity + kIdentityParam.Length, identityLength));
+        var delegationString = HttpUtility.UrlDecode(parameters.Substring(indexOfDelegation + kDelegationParam.Length));
 
-        Debug.Log("Identity length is: " + identity.Length);
-        Debug.Log(identity);
-        Debug.Log("Delegation length is: " + delegation.Length);
-        Debug.Log(delegation);
+        Debug.Log("Identity length is: " + identityString.Length);
+        Debug.Log(identityString);
+        Debug.Log("Delegation length is: " + delegationString.Length);
+        Debug.Log(delegationString);
+
+        var identity = JsonConvert.DeserializeObject<string[]>(identityString);
+        var delegation = JsonConvert.DeserializeObject<DelegationChain>(delegationString);
+        TestCSharpAgent.SendMessage(identity, delegation);
     }
 }

@@ -38,4 +38,9 @@ public class TestCSharpAgent : MonoBehaviour
     void Update()
     {
     }
+
+    public static void SendMessage(string[] identity, DelegationChain delegationChain)
+    {
+        // TODO: Initialize a DelegationIdentity and call the IC.
+    }
 }
