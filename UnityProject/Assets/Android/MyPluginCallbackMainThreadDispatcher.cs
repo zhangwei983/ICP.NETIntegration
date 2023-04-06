@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Class that queues and and processes the received MyPluginCallbacks.
@@ -73,11 +72,6 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
 
         Debug.Log("Params path '" + paramsPath + "' exists: " + File.Exists(paramsPath));
 
-        var go = GameObject.Find("Callback URL");
-        var text = go?.GetComponent<Text>();
-        if (text != null)
-            text.text = paramsPath;
-
         var parameters = File.ReadAllText(paramsPath);
         Debug.Log("Params length is: " + parameters.Length);
 
@@ -99,11 +93,6 @@ public class MyPluginCallbackMainThreadDispatcher : MonoBehaviour
         var identityLength = indexOfDelegation - indexOfIdentity - kIdentityParam.Length;
         var identityString = HttpUtility.UrlDecode(parameters.Substring(indexOfIdentity + kIdentityParam.Length, identityLength));
         var delegationString = HttpUtility.UrlDecode(parameters.Substring(indexOfDelegation + kDelegationParam.Length));
-
-        Debug.Log("Identity length is: " + identityString.Length);
-        Debug.Log(identityString);
-        Debug.Log("Delegation length is: " + delegationString.Length);
-        Debug.Log(delegationString);
 
         var identity = JsonConvert.DeserializeObject<string[]>(identityString);
         var delegation = JsonConvert.DeserializeObject<DelegationChainModel>(delegationString);

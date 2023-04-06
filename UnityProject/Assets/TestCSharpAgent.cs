@@ -1,8 +1,8 @@
 using UnityEngine;
+using UnityEngine.UI;
 using EdjCase.ICP.Agent;
 using EdjCase.ICP.Agent.Agents;
 using EdjCase.ICP.Agent.Identities;
-using EdjCase.ICP.Agent.Responses;
 using EdjCase.ICP.Candid.Models;
 using EdjCase.ICP.Candid.Utilities;
 using System.Collections.Generic;
@@ -32,13 +32,11 @@ public class TestCSharpAgent : MonoBehaviour
         var innerIdentity = new Ed25519Identity(publicKey, privateKey);
 
         // Initialize DelegationIdentity.
-        Debug.Log("Chain public key: " + delegationChainModel.publicKey);
-        var chainPublicKey = DerEncodedPublicKey.FromEd25519(ByteUtil.FromHexString(delegationChainModel.publicKey));
+        var chainPublicKey = DerEncodedPublicKey.FromDer(ByteUtil.FromHexString(delegationChainModel.publicKey));
         var delegations = new List<SignedDelegation>();
         foreach (var signedDelegationModel in delegationChainModel.delegations)
         {
-            Debug.Log("Delegation public key: " + signedDelegationModel.delegation.pubkey);
-            var pubKey = DerEncodedPublicKey.FromEd25519(ByteUtil.FromHexString(signedDelegationModel.delegation.pubkey));
+            var pubKey = DerEncodedPublicKey.FromDer(ByteUtil.FromHexString(signedDelegationModel.delegation.pubkey));
             var expiration = ICTimestamp.FromNanoSeconds(Convert.ToUInt64(signedDelegationModel.delegation.expiration, 16));
             var delegation = new Delegation(pubKey.Value, expiration);
 
@@ -59,5 +57,10 @@ public class TestCSharpAgent : MonoBehaviour
         var content = await client.Greet();
 
         Debug.Log("Greeting result is: " + content);
+
+        var go = GameObject.Find("My Princinpal");
+        var text = go?.GetComponent<Text>();
+        if (text != null)
+            text.text = content;
     }
 }
