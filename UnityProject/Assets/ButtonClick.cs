@@ -12,7 +12,7 @@ public class ButtonClick : MonoBehaviour
     {
 #if UNITY_ANDROID
         var pluginClass = new AndroidJavaClass("com.mycompany.testurl.MyPlugin");
-        mPlugin = pluginClass.CallStatic<AndroidJavaObject>("initImpl", new MyPluginCallback());
+        mPlugin = pluginClass.CallStatic<AndroidJavaObject>("initImpl");
 #endif
     }
 

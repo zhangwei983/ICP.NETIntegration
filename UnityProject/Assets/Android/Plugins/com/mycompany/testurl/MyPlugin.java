@@ -9,30 +9,18 @@ import com.unity3d.player.UnityPlayer;
 import java.io.File;
 import java.io.FileOutputStream;
 
-// Implement in C# to call from java.
-interface MyPluginCallback {
-    void onSendMessage(String url);
-}
-
 public class MyPlugin {
     static final String TAG_PLUGIN = "MyPlugin";
 
     public static MyPlugin sCurrentPlugin;
 
-    private MyPluginCallback mMyPluginCallback;
-
-    public static MyPlugin initImpl(MyPluginCallback pluginCallback) {
+    public static MyPlugin initImpl() {
         if (sCurrentPlugin != null)
             return sCurrentPlugin;
 
         sCurrentPlugin = new MyPlugin();
-        sCurrentPlugin.init(pluginCallback);
 
         return sCurrentPlugin;
-    }
-
-    public void init(MyPluginCallback pluginCallback) {
-        mMyPluginCallback = pluginCallback;
     }
 
     public void openBrowser(String url) {
