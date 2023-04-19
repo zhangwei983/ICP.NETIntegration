@@ -45,9 +45,6 @@ public class MyPlugin {
     }
 
     public void sendMessage() {
-        if (mMyPluginCallback == null)
-            return;
-
         Uri uri = UnityPlayer.currentActivity.getIntent().getData();
         if (uri == null)
             return;
@@ -72,12 +69,11 @@ public class MyPlugin {
             fileOutputStream.write(params.getBytes());
             fileOutputStream.flush();
             fileOutputStream.close();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Pass the params path back to C#.
-        mMyPluginCallback.onSendMessage(paramsPath);
+        UnityPlayer.UnitySendMessage("Main Camera", "OnMessageSent", paramsPath);
     }
 }

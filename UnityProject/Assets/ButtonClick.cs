@@ -22,4 +22,19 @@ public class ButtonClick : MonoBehaviour
         mPlugin.Call("openBrowser", sTestTarget);
 #endif
     }
+
+    public void OnApplicationPause(bool pause)
+    {
+        // if it's resuming.
+        if (!pause)
+        {
+#if UNITY_ANDROID
+            // OnApplicationPause will be called while launching the app, before mPlugin is initialized.
+            if (mPlugin == null)
+                return;
+
+            mPlugin.Call("sendMessage");
+#endif
+        }
+    }
 }
