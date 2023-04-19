@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class ICGameKitPlugin {
-    static final String TAG_PLUGIN = "MyPlugin";
+    static final String TAG_PLUGIN = "ICGameKitPlugin";
 
     public static ICGameKitPlugin sCurrentPlugin;
 
