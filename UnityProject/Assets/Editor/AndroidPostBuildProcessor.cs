@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml;
 using UnityEditor.Android;
 
-namespace Unity.Notifications
+namespace IC.GameKit
 {
     public class AndroidPostProcessor : IPostGenerateGradleAndroidProject
     {
@@ -41,6 +41,7 @@ namespace Unity.Notifications
             if (activityNode == null)
                 throw new ArgumentException(string.Format("Missing 'activity' node in '{0}'.", manifestPath));
 
+            // TODO: we need to check if the same url scheme has already existed before injecting.
             var intentFilterNode = xmlDoc.CreateElement("intent-filter");
             
             var actionNode = xmlDoc.CreateElement("action");

@@ -1,4 +1,4 @@
-package com.mycompany.testurl;
+package com.icgamekit.plugin;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,16 +9,16 @@ import com.unity3d.player.UnityPlayer;
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class MyPlugin {
-    static final String TAG_PLUGIN = "MyPlugin";
+public class ICGameKitPlugin {
+    static final String TAG_PLUGIN = "ICGameKitPlugin";
 
-    public static MyPlugin sCurrentPlugin;
+    public static ICGameKitPlugin sCurrentPlugin;
 
-    public static MyPlugin initImpl() {
+    public static ICGameKitPlugin initImpl() {
         if (sCurrentPlugin != null)
             return sCurrentPlugin;
 
-        sCurrentPlugin = new MyPlugin();
+        sCurrentPlugin = new ICGameKitPlugin();
 
         return sCurrentPlugin;
     }
@@ -43,7 +43,7 @@ public class MyPlugin {
             return;
 
         String params = url.substring(index);
-        Log.i(TAG_PLUGIN, params);
+        //Log.i(TAG_PLUGIN, params);
 
         // Write to a temporary file to internal storage and read it back from C# side.
         // The reason is we can only pass 1024 bytes as string back to the C# side, but the params string with identity&delegation is more than 3k bytes.
@@ -62,6 +62,6 @@ public class MyPlugin {
         }
 
         // Pass the params path back to C#.
-        UnityPlayer.UnitySendMessage("Main Camera", "OnMessageSent", paramsPath);
+        UnityPlayer.UnitySendMessage("AgentAndPlugin", "OnMessageSent", paramsPath);
     }
 }
