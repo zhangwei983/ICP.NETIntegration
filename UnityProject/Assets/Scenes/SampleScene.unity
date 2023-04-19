@@ -671,7 +671,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 272906662}
-        m_TargetAssemblyTypeName: AndroidPluginProxy, Assembly-CSharp
+        m_TargetAssemblyTypeName: IC.GameKit.PluginProxy, Assembly-CSharp
         m_MethodName: OpenBrowser
         m_Mode: 1
         m_Arguments:
