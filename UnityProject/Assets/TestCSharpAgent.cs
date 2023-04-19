@@ -8,6 +8,9 @@ using EdjCase.ICP.Candid.Utilities;
 using System.Collections.Generic;
 using EdjCase.ICP.Agent.Models;
 using System;
+using System.IO;
+using Newtonsoft.Json;
+using System.Web;
 
 public class TestCSharpAgent : MonoBehaviour
 {
@@ -21,7 +24,41 @@ public class TestCSharpAgent : MonoBehaviour
     {
     }
 
-    public static async void SendMessage(string[] identity, DelegationChainModel delegationChainModel)
+    public void OnMessageSent(string identityPath)
+    {
+        if (string.IsNullOrEmpty(identityPath) || !File.Exists(identityPath))
+            return;
+
+        Debug.Log("Identity path '" + identityPath + "' exists.");
+
+        var parameters = File.ReadAllText(identityPath);
+        Debug.Log("Params length is: " + parameters.Length);
+
+        const string kIdentityParam = "identity=";
+        const string kDelegationParam = "&delegation=";
+        var indexOfIdentity = parameters.IndexOf(kIdentityParam);
+        if (indexOfIdentity == -1)
+        {
+            Debug.LogError("Cannot find identity");
+            return;
+        }
+        var indexOfDelegation = parameters.IndexOf(kDelegationParam);
+        if (indexOfDelegation == -1)
+        {
+            Debug.LogError("Cannot find delegation");
+            return;
+        }
+
+        var identityLength = indexOfDelegation - indexOfIdentity - kIdentityParam.Length;
+        var identityString = HttpUtility.UrlDecode(parameters.Substring(indexOfIdentity + kIdentityParam.Length, identityLength));
+        var delegationString = HttpUtility.UrlDecode(parameters.Substring(indexOfDelegation + kDelegationParam.Length));
+
+        var identity = JsonConvert.DeserializeObject<string[]>(identityString);
+        var delegation = JsonConvert.DeserializeObject<DelegationChainModel>(delegationString);
+        TestCSharpAgent.CallCanister(identity, delegation);
+    }
+
+    public static async void CallCanister(string[] identity, DelegationChainModel delegationChainModel)
     {
         Debug.Assert(identity != null && identity.Length == 2);
         Debug.Assert(delegationChainModel != null && delegationChainModel.delegations.Length >= 1);
@@ -55,8 +92,6 @@ public class TestCSharpAgent : MonoBehaviour
         // Intialize Client and make the call.
         var client = new GreetingClient.GreetingClient(agent, canisterId);
         var content = await client.Greet();
-
-        Debug.Log("Greeting result is: " + content);
 
         var go = GameObject.Find("My Princinpal");
         var text = go?.GetComponent<Text>();
