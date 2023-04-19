@@ -1,4 +1,4 @@
-package com.mycompany.testurl;
+package com.icgamekit.plugin;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,7 +9,7 @@ import com.unity3d.player.UnityPlayer;
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class MyPlugin {
+public class ICGameKitPlugin {
     static final String TAG_PLUGIN = "MyPlugin";
 
     public static MyPlugin sCurrentPlugin;
@@ -62,6 +62,6 @@ public class MyPlugin {
         }
 
         // Pass the params path back to C#.
-        UnityPlayer.UnitySendMessage("Main Camera", "OnMessageSent", paramsPath);
+        UnityPlayer.UnitySendMessage("AgentAndPlugin", "OnMessageSent", paramsPath);
     }
 }

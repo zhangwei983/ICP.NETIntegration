@@ -12,11 +12,15 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Web;
 
-public class TestCSharpAgent : MonoBehaviour
+public class TestICPAgent : MonoBehaviour
 {
+    Text mMyPrincipalText = null;
+
     // Start is called before the first frame update
     void Start()
     {
+        var go = GameObject.Find("My Princinpal");
+        mMyPrincipalText = go?.GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -55,10 +59,10 @@ public class TestCSharpAgent : MonoBehaviour
 
         var identity = JsonConvert.DeserializeObject<string[]>(identityString);
         var delegation = JsonConvert.DeserializeObject<DelegationChainModel>(delegationString);
-        TestCSharpAgent.CallCanister(identity, delegation);
+        CallCanister(identity, delegation);
     }
 
-    public static async void CallCanister(string[] identity, DelegationChainModel delegationChainModel)
+    public async void CallCanister(string[] identity, DelegationChainModel delegationChainModel)
     {
         Debug.Assert(identity != null && identity.Length == 2);
         Debug.Assert(delegationChainModel != null && delegationChainModel.delegations.Length >= 1);
@@ -93,9 +97,7 @@ public class TestCSharpAgent : MonoBehaviour
         var client = new GreetingClient.GreetingClient(agent, canisterId);
         var content = await client.Greet();
 
-        var go = GameObject.Find("My Princinpal");
-        var text = go?.GetComponent<Text>();
-        if (text != null)
-            text.text = content;
+        if (mMyPrincipalText != null)
+            mMyPrincipalText.text = content;
     }
 }

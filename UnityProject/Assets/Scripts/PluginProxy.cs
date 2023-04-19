@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ButtonClick : MonoBehaviour
+public class PluginProxy : MonoBehaviour
 {
     private static string sTestTarget = @"https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
 
@@ -11,12 +11,12 @@ public class ButtonClick : MonoBehaviour
     public void Start()
     {
 #if UNITY_ANDROID
-        var pluginClass = new AndroidJavaClass("com.mycompany.testurl.MyPlugin");
+        var pluginClass = new AndroidJavaClass("com.icgamekit.plugin.ICGameKitPlugin");
         mPlugin = pluginClass.CallStatic<AndroidJavaObject>("initImpl");
 #endif
     }
 
-    public void BrowserButtonClick()
+    public void OpenBrowser()
     {
 #if UNITY_ANDROID
         mPlugin.Call("openBrowser", sTestTarget);
@@ -25,7 +25,7 @@ public class ButtonClick : MonoBehaviour
 
     public void OnApplicationPause(bool pause)
     {
-        // if it's resuming.
+        // If it's resuming.
         if (!pause)
         {
 #if UNITY_ANDROID
