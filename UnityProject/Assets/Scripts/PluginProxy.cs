@@ -4,7 +4,9 @@ namespace IC.GameKit
 {
     public class PluginProxy : MonoBehaviour
     {
-        private static string sTestTarget = @"https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
+        public string testTarget = "https://6x7nu-oaaaa-aaaan-qdaua-cai.ic0.app";
+        public string gameObjectName = "AgentAndPlugin";
+        public string methodName = "OnMessageSent";
 
 #if UNITY_ANDROID
         private AndroidJavaObject mPlugin = null;
@@ -21,7 +23,7 @@ namespace IC.GameKit
         public void OpenBrowser()
         {
 #if UNITY_ANDROID
-            mPlugin.Call("openBrowser", sTestTarget);
+            mPlugin.Call("openBrowser", testTarget);
 #endif
         }
 
@@ -35,7 +37,7 @@ namespace IC.GameKit
                 if (mPlugin == null)
                     return;
 
-                mPlugin.Call("sendMessage");
+                mPlugin.Call("sendMessage", new string[] { gameObjectName, methodName});
 #endif
             }
         }

@@ -32,7 +32,17 @@ public class ICGameKitPlugin {
         UnityPlayer.currentActivity.startActivity(intent);
     }
 
-    public void sendMessage() {
+    public void sendMessage(String[] arguments) {
+        if (arguments == null || arguments.length != 2)
+            return;
+
+        String gameObjectName = arguments[0];
+        String methodName = arguments[1];
+
+        if (gameObjectName == null || gameObjectName.length() == 0
+            || methodName == null || methodName.length() == 0)
+            return;
+
         Uri uri = UnityPlayer.currentActivity.getIntent().getData();
         if (uri == null)
             return;
@@ -62,6 +72,6 @@ public class ICGameKitPlugin {
         }
 
         // Pass the params path back to C#.
-        UnityPlayer.UnitySendMessage("AgentAndPlugin", "OnMessageSent", paramsPath);
+        UnityPlayer.UnitySendMessage(gameObjectName, methodName, paramsPath);
     }
 }
