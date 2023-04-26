@@ -17,12 +17,17 @@ namespace IC.GameKit
     public class TestICPAgent : MonoBehaviour
     {
         Text mMyPrincipalText = null;
+        Ed25519Identity mEd25519Identity = null;
+
+        public Ed25519Identity TestIdentity { get { return mEd25519Identity; } }
 
         // Start is called before the first frame update
         void Start()
         {
             var go = GameObject.Find("My Princinpal");
             mMyPrincipalText = go?.GetComponent<Text>();
+
+            mEd25519Identity = Ed25519Identity.Create();
         }
 
         // Update is called once per frame
@@ -30,24 +35,17 @@ namespace IC.GameKit
         {
         }
 
-        public void OnMessageSent(string identityPath)
+        public void OnMessageSent(string delegationPath)
         {
-            if (string.IsNullOrEmpty(identityPath) || !File.Exists(identityPath))
+            if (string.IsNullOrEmpty(delegationPath) || !File.Exists(delegationPath))
                 return;
 
             //Debug.Log("Identity path '" + identityPath + "' exists.");
 
-            var parameters = File.ReadAllText(identityPath);
+            var parameters = File.ReadAllText(delegationPath);
             //Debug.Log("Params length is: " + parameters.Length);
 
-            const string kIdentityParam = "identity=";
-            const string kDelegationParam = "&delegation=";
-            var indexOfIdentity = parameters.IndexOf(kIdentityParam);
-            if (indexOfIdentity == -1)
-            {
-                Debug.LogError("Cannot find identity");
-                return;
-            }
+            const string kDelegationParam = "delegation=";
             var indexOfDelegation = parameters.IndexOf(kDelegationParam);
             if (indexOfDelegation == -1)
             {
@@ -55,24 +53,15 @@ namespace IC.GameKit
                 return;
             }
 
-            var identityLength = indexOfDelegation - indexOfIdentity - kIdentityParam.Length;
-            var identityString = HttpUtility.UrlDecode(parameters.Substring(indexOfIdentity + kIdentityParam.Length, identityLength));
             var delegationString = HttpUtility.UrlDecode(parameters.Substring(indexOfDelegation + kDelegationParam.Length));
 
-            var identity = JsonConvert.DeserializeObject<string[]>(identityString);
             var delegation = JsonConvert.DeserializeObject<DelegationChainModel>(delegationString);
-            CallCanister(identity, delegation);
+            CallCanister(delegation);
         }
 
-        public async void CallCanister(string[] identity, DelegationChainModel delegationChainModel)
+        public async void CallCanister(DelegationChainModel delegationChainModel)
         {
-            Debug.Assert(identity != null && identity.Length == 2);
             Debug.Assert(delegationChainModel != null && delegationChainModel.delegations.Length >= 1);
-
-            // Initialize Ed25519Identity. 
-            var publicKey = DerEncodedPublicKey.FromEd25519(ByteUtil.FromHexString(identity[0]));
-            var privateKey = ByteUtil.FromHexString(identity[1]);
-            var innerIdentity = new Ed25519Identity(publicKey, privateKey);
 
             // Initialize DelegationIdentity.
             var chainPublicKey = DerEncodedPublicKey.FromDer(ByteUtil.FromHexString(delegationChainModel.publicKey));
@@ -88,7 +77,7 @@ namespace IC.GameKit
                 delegations.Add(signedDelegation);
             }
             var delegationChain = new DelegationChain(chainPublicKey, delegations);
-            var delegationIdentity = new DelegationIdentity(innerIdentity, delegationChain);
+            var delegationIdentity = new DelegationIdentity(TestIdentity, delegationChain);
 
             // Initialize HttpAgent.
             var agent = new HttpAgent(delegationIdentity);
