@@ -48,30 +48,30 @@ public class ICGameKitPlugin {
             return;
 
         String url = uri.toString();
-        int index = url.indexOf("identity=");
+        int index = url.indexOf("delegation=");
         if (index == -1)
             return;
 
-        String params = url.substring(index);
-        //Log.i(TAG_PLUGIN, params);
+        String delegation = url.substring(index);
+        //Log.i(TAG_PLUGIN, delegation);
 
         // Write to a temporary file to internal storage and read it back from C# side.
-        // The reason is we can only pass 1024 bytes as string back to the C# side, but the params string with identity&delegation is more than 3k bytes.
-        String paramsPath = UnityPlayer.currentActivity.getFilesDir().getPath() + "/params.file";
-        File paramsFile = new File(paramsPath);
+        // The reason is we can only pass 1024 bytes as string back to the C# side, but the params string with delegation is more than 3k bytes.
+        String delegationPath = UnityPlayer.currentActivity.getFilesDir().getPath() + "/delegation.file";
+        File delegationFile = new File(delegationPath);
         try {
-            if (paramsFile.exists())
-                paramsFile.delete();
+            if (delegationFile.exists())
+                delegationFile.delete();
 
-            FileOutputStream fileOutputStream = new FileOutputStream(paramsFile);
-            fileOutputStream.write(params.getBytes());
+            FileOutputStream fileOutputStream = new FileOutputStream(delegationFile);
+            fileOutputStream.write(delegation.getBytes());
             fileOutputStream.flush();
             fileOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Pass the params path back to C#.
-        UnityPlayer.UnitySendMessage(gameObjectName, methodName, paramsPath);
+        // Pass the delegation path back to C#.
+        UnityPlayer.UnitySendMessage(gameObjectName, methodName, delegationPath);
     }
 }
